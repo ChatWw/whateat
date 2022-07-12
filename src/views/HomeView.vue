@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import "animate.css";
 import tooltip from "@/components/tooltip";
 import { breaker, lunch } from "@/assets/js/food.js";
 export default {
