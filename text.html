@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>随机选择器</title>
+</head>
+<style>
+    *{
+        margin: 0px;
+        padding: 0px;
+        user-select: none;
+    }
+
+    #show{
+        width:  480px;
+        height: 320px;
+        background: rgb(255, 127, 39);
+        margin: 0px auto;
+        margin-top: 100px;
+        overflow: hidden;
+        border-radius: 20px;
+    }
+
+    #uname{
+        width:  320px;
+        height: 80px;
+        background: blue;
+        color: #FFF;
+        font-size: 30px;
+        text-align: center;
+        margin: 0 auto;
+        line-height: 80px;
+        margin-top: 60px;
+        border-radius: 10px;
+        margin-top: 80px;
+    }
+
+    #btn{
+        width:  200px;
+        height:60px;
+        border: none;
+        background: #FFF;
+        border-radius: 10px;
+        margin: 0 auto;
+        margin-top: 30px;
+        display: block;
+        color: blue;
+        font-size: 40px;
+        text-align: center;
+    }
+    #btn:hover{
+        cursor: pointer;
+    }
+</style>
+<body>
+    <div id="show">
+        <div id="uname">答案</div>
+        <div id="btn">开始</div>
+    </div>
+<script>
+    var uname = document.getElementById("uname");
+    var btn = document.getElementById("btn");
+    var select = ["A", "B", "C", "D"];
+    var start;
+    var rand = function(m, n) {
+        var num = Math.floor(Math.random()*(n - m) + m);
+        return num;
+    }
+    btn.onclick = function() {
+        if(this.innerHTML == "开始") {
+            /*解决定时器叠加*/
+            if(start) {
+                return;
+            }
+            start = setInterval(function() {
+                var index = rand(0, select.length - 1); 
+                uname.innerHTML = select[index];
+            },50);
+            this.innerHTML = "停止";
+        
+        }else{
+            clearInterval(start);
+            start = "";
+            this.innerHTML = "开始";
+        }
+    }
+</script>
+</body>
+</html>
