@@ -54,9 +54,11 @@ export default {
     this.foodList = breaker;
   },
   mounted() {
-    setTimeout(() => {
-      this["flag"] = false;
-    }, 4000);
+    this.$nextTick(() => {
+      setTimeout(() => {
+        this["flag"] = false;
+      }, 4000);
+    });
   },
   methods: {
     // 选择早中晚饭
