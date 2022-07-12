@@ -13,6 +13,8 @@
         <button class="btn" @click="toggleSelect">{{ status }}</button>
       </div>
     </div>
+    <!-- 动态词云 -->
+    <div id="cloudword"></div>
   </div>
 </template>
 
@@ -63,6 +65,9 @@ export default {
   methods: {
     // 选择早中晚饭
     handleClick() {
+      if (this.timer) {
+        return;
+      }
       this.status = "点我";
       this.food = "神马？";
       this.flag = false;
