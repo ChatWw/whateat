@@ -9,6 +9,33 @@
     />
     <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
     <title>今天早上吃神马？</title>
+    <style>
+      .text-popup {
+        animation: textPopup 1s ease-in-out;
+        color: #333;
+        font-weight: 700;
+        user-select: none;
+        white-space: nowrap;
+        position: absolute;
+        font-size: 12px;
+        z-index: 99;
+      }
+      @keyframes textPopup {
+        0%,
+        100% {
+          opacity: 0;
+        }
+
+        50% {
+          opacity: 1;
+          font-size: 24px;
+        }
+
+        100% {
+          transform: translateX(-50px);
+        }
+      }
+    </style>
   </head>
   <body>
     <noscript>

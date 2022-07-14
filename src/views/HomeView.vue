@@ -14,7 +14,7 @@
       </div>
     </div>
     <!-- 动态词云 -->
-    <div id="cloudword"></div>
+    <div id="cloudword" ref="cloudword"></div>
   </div>
 </template>
 
@@ -50,6 +50,7 @@ export default {
       status: "点我",
       timer: null,
       foodList: [],
+      index: 0,
     };
   },
   created() {
@@ -69,14 +70,14 @@ export default {
         return;
       }
       [this["status"], this["food"], this["flag"]] = ["点我", "神马？", false];
-      this.num++;
-      if (this.num > 3) this.num = 1;
-      this.day.forEach((item) => {
+      this["num"]++;
+      if (this.num > 3) this["num"] = 1;
+      this["day"].forEach((item) => {
         if (item.key == this.num) {
-          this.nowDate = item.value;
+          this["nowDate"] = item.value;
         }
       });
-      this.nowDate == "早上"
+      this["nowDate"] == "早上"
         ? (this["foodList"] = breaker)
         : (this["foodList"] = lunch);
       document.title = `今天${this.nowDate}吃神马？`;
@@ -87,9 +88,10 @@ export default {
         if (this.timer) {
           return;
         }
-        this.timer = setInterval(() => {
+        this["timer"] = setInterval(() => {
+          this.setText();
           let index = this.rand(0, this.foodList.length - 1);
-          this["food"] = `${this.foodList[index]}!`;
+          this["food"] = `${this["foodList"][index]}!`;
         }, 50);
         this["status"] = "选一个";
       } else {
@@ -103,6 +105,25 @@ export default {
       let num = Math.floor(Math.random() * (n - m) + m);
       return num;
     },
+    setText() {
+      let t = this.rand(0, 100);
+      let l = this.rand(0, 100);
+      let eleText = document.createElement("span");
+      eleText.className = "text-popup";
+      this.$refs.cloudword.appendChild(eleText);
+      if (this.foodList[this.index]) {
+        eleText.innerHTML = this.foodList[this.index];
+      } else {
+        this.index = 0;
+        eleText.innerHTML = this.foodList[this.index];
+      }
+      eleText.addEventListener("animationend", function () {
+        eleText.parentNode.removeChild(eleText);
+      });
+      eleText.style.left = l + "%";
+      eleText.style.top = t + "%";
+      this.index++;
+    },
   },
 };
 </script>
@@ -112,12 +133,19 @@ export default {
   height: 100%;
   position: relative;
 }
+#cloudword {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
 .word-content {
   position: absolute;
   left: 50%;
   top: 50%;
   width: 100%;
   height: 100px;
+  z-index: 2;
   transform: translate(-50%, -50%);
 }
 .title {
