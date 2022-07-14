@@ -32,6 +32,10 @@ body {
   height: 100%;
   margin: 0;
 }
+#app {
+  width: 100%;
+  height: 100%;
+}
 @-webkit-keyframes scrollToUp {
   0% {
     background-position: 0 0;

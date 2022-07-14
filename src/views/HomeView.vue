@@ -53,7 +53,7 @@ export default {
     };
   },
   created() {
-    this.foodList = breaker;
+    this["foodList"] = breaker;
   },
   mounted() {
     this.$nextTick(() => {
@@ -68,9 +68,7 @@ export default {
       if (this.timer) {
         return;
       }
-      this.status = "点我";
-      this.food = "神马？";
-      this.flag = false;
+      [this["status"], this["food"], this["flag"]] = ["点我", "神马？", false];
       this.num++;
       if (this.num > 3) this.num = 1;
       this.day.forEach((item) => {
@@ -91,13 +89,12 @@ export default {
         }
         this.timer = setInterval(() => {
           let index = this.rand(0, this.foodList.length - 1);
-          this.food = `${this.foodList[index]}!`;
+          this["food"] = `${this.foodList[index]}!`;
         }, 50);
-        this.status = "选一个";
+        this["status"] = "选一个";
       } else {
         clearInterval(this.timer);
-        this.timer = null;
-        this.status = "再来一次";
+        [this["timer"], this["status"]] = [null, "再来一次"];
         document.title = `今天${this.nowDate}吃${this.food}`;
       }
     },
@@ -110,6 +107,11 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.home {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
 .word-content {
   position: absolute;
   left: 50%;
@@ -149,6 +151,7 @@ export default {
   background-image: linear-gradient(90deg, #a9c9ff 0%, #ffbbec 100%);
   color: #fff;
   transition: all 1s;
+  // linear-gradient不支持动画，用伪元素实现
   &::before {
     content: "";
     position: absolute;
