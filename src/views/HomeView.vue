@@ -13,6 +13,9 @@
         <button class="btn" @click="toggleSelect">{{ status }}</button>
       </div>
     </div>
+    <transition name="el-fade-in">
+      <keywords class="keywords" v-if="isShow" />
+    </transition>
     <!-- 动态词云 -->
     <div id="cloudword" ref="cloudword"></div>
   </div>
@@ -21,11 +24,13 @@
 <script>
 import "animate.css";
 import tooltip from "@/components/tooltip";
+import keywords from "@/components/keyWords";
 import { breaker, lunch } from "@/assets/js/food.js";
 export default {
   name: "HomeView",
   components: {
     tooltip,
+    keywords,
   },
   data() {
     return {
@@ -50,7 +55,8 @@ export default {
       status: "点我",
       timer: null,
       foodList: [],
-      index: 0,
+      keywords: "",
+      isShow: false,
     };
   },
   created() {
@@ -94,7 +100,12 @@ export default {
           this["food"] = `${this["foodList"][index]}!`;
         }, 50);
         this["status"] = "选一个";
+        this.isShow = false;
       } else {
+        let freeNum = this.rand(0, 2);
+        if (freeNum / 2 == 0) {
+          this.isShow = true;
+        }
         clearInterval(this.timer);
         [this["timer"], this["status"]] = [null, "再来一次"];
         document.title = `今天${this.nowDate}吃${this.food}`;
@@ -105,24 +116,24 @@ export default {
       let num = Math.floor(Math.random() * (n - m) + m);
       return num;
     },
+    // 页面随机位置生成菜系
     setText() {
       let t = this.rand(0, 100);
       let l = this.rand(0, 100);
+      let index = this.rand(0, this.foodList.length - 1);
       let eleText = document.createElement("span");
       eleText.className = "text-popup";
       this.$refs.cloudword.appendChild(eleText);
-      if (this.foodList[this.index]) {
-        eleText.innerHTML = this.foodList[this.index];
-      } else {
-        this.index = 0;
-        eleText.innerHTML = this.foodList[this.index];
-      }
+      eleText.innerHTML = this.foodList[index];
       eleText.addEventListener("animationend", function () {
         eleText.parentNode.removeChild(eleText);
       });
       eleText.style.left = l + "%";
       eleText.style.top = t + "%";
-      this.index++;
+    },
+    // 建议词
+    setKeywords() {
+      this.isShow = true;
     },
   },
 };
@@ -200,5 +211,11 @@ export default {
 }
 .blod {
   font-weight: bold;
+}
+.keywords {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 8%;
 }
 </style>
